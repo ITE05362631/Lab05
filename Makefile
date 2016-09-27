@@ -1,8 +1,8 @@
-SocketConnect:SocketConnect.o
-	gcc -o SocketConnect SocketConnect.o
+ReceiveDataSocket:ReceiveDataSocket.o
+	gcc -o ReceiveDataSocket ReceiveDataSocket.o
 
-SocketConnect.o:SocketConnect.c
-	gcc -c SocketConnect.c
+ReceiveDataSocket.o:ReceiveDataSocket.c
+	gcc -c ReceiveDataSocket.c
 
 clean:
 	rm *.o
