@@ -1,37 +1,39 @@
 #include <stdio.h>
-// #include <
 #include <sys/socket.h>
 #include<arpa/inet.h>
-
-// struct sockaddr_in server;
+#include<netdb.h>
+#include<string.h> 
 
 int main(int argc , char *argv[])
 {
-//     struct sockaddr_in{
-//     short sin_family;
-//     unsigned short sin_port;
-//     struct in_addr sin_addr;
-//     char sin_zero[8];
-// };
-// struct in_addr{
-//     unsigned long s_addr;
-// };
-// struct sockaddr {
-//     unsigned short   sa_family;    // address family, AF_xxx
-//     char    sa_data[14];
-// };
+
     int socket_desc;
     struct sockaddr_in server;
-//Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
     if (socket_desc == -1)
     {
         printf("Could not create socket");
     }
-    server.sin_addr.s_addr = inet_addr("120.96.82.30");
+
+    char *hostname = "www.mcu.edu.tw";
+    char ip[100];
+    struct hostent *he;
+    struct in_addr **addr_list;
+    int i;
+    if ( (he = gethostbyname( hostname ) ) == NULL)
+    {
+        herror("gethostbyname");
+        return 1;
+    }
+    addr_list = (struct in_addr **) he->h_addr_list;
+    for(i = 0; addr_list[i] != NULL; i++)
+    {
+        strcpy(ip , inet_ntoa(*addr_list[i]) );
+    }
+
+    server.sin_addr.s_addr = inet_addr(ip);
     server.sin_family = AF_INET;
     server.sin_port = htons( 80 );
-//Connect to remote server
     if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0)
     {
         puts("connect error");
